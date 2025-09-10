@@ -15,7 +15,7 @@ module InstructionMemory(
     
     
     initial begin
-        $readmemh("Instructions.mem", memory);
+        $readmemh("program.mem", memory);
     end
     
     

@@ -32,7 +32,7 @@ TARGET = $(BUILD_DIR)/program
 # Create build directory
 $(shell mkdir $(BUILD_DIR) 2>nul || echo off)
 
-all: $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).mem $(TARGET).dump $(TARGET).map
+all: $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).mem $(TARGET).dump $(TARGET).map $(TARGET)_numeric.dump
 
 # Link all object files
 $(TARGET).elf: $(ALL_OBJECTS) $(LINKER_DIR)/memory_layout.ld
@@ -67,7 +67,10 @@ $(TARGET).map: $(TARGET).elf
 	$(OBJDUMP) -h $< > $@
 
 $(TARGET).dump: $(TARGET).elf
-	$(OBJDUMP) -d $< > $@
+	$(OBJDUMP) -d -M no-aliases $< > $@
+
+$(TARGET)_numeric.dump: $(TARGET).elf
+	$(OBJDUMP) -d -M no-aliases,numeric $< > $@
 
 clean:
 	del /Q $(BUILD_DIR)\* 2>nul || echo off
