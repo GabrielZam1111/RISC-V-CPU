@@ -1,0 +1,49 @@
+
+build/program.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00001117          	auipc	sp,0x1
+   4:	3fc10113          	addi	sp,sp,1020 # 13fc <__stack_top>
+   8:	07800293          	li	t0,120
+   c:	00001317          	auipc	t1,0x1
+  10:	ff430313          	addi	t1,t1,-12 # 1000 <__bss_end>
+  14:	00001397          	auipc	t2,0x1
+  18:	fec38393          	addi	t2,t2,-20 # 1000 <__bss_end>
+
+0000001c <copy_data>:
+  1c:	00730c63          	beq	t1,t2,34 <clear_bss>
+  20:	0002ae03          	lw	t3,0(t0)
+  24:	01c32023          	sw	t3,0(t1)
+  28:	00428293          	addi	t0,t0,4
+  2c:	00430313          	addi	t1,t1,4
+  30:	fedff06f          	j	1c <copy_data>
+
+00000034 <clear_bss>:
+  34:	00001297          	auipc	t0,0x1
+  38:	fcc28293          	addi	t0,t0,-52 # 1000 <__bss_end>
+  3c:	00001317          	auipc	t1,0x1
+  40:	fc430313          	addi	t1,t1,-60 # 1000 <__bss_end>
+
+00000044 <clear_bss_loop>:
+  44:	00628863          	beq	t0,t1,54 <call_main>
+  48:	0002a023          	sw	zero,0(t0)
+  4c:	00428293          	addi	t0,t0,4
+  50:	ff5ff06f          	j	44 <clear_bss_loop>
+
+00000054 <call_main>:
+  54:	008000ef          	jal	5c <main>
+
+00000058 <loop>:
+  58:	0000006f          	j	58 <loop>
+
+0000005c <main>:
+  5c:	000017b7          	lui	a5,0x1
+  60:	23478793          	addi	a5,a5,564 # 1234 <__bss_end+0x234>
+  64:	00001737          	lui	a4,0x1
+  68:	00f72023          	sw	a5,0(a4) # 1000 <__bss_end>
+  6c:	00000013          	nop
+  70:	00000013          	nop
+  74:	ff9ff06f          	j	6c <main+0x10>
