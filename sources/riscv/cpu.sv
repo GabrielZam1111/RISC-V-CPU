@@ -26,7 +26,7 @@ module cpu(
         input logic [3:0]btn,
         output logic [15:0]led 
     );
-    logic reset;
+
     
      
     

@@ -59,7 +59,7 @@ module ID_Stage(
 
     ControlUnit CONTROL_UNIT(
         .opcode(instruction[6:0]),
-        .funct3(instruction[15:12]),
+        .funct3(instruction[14:12]),
         .funct7(instruction[31:25]),
         .imm_sel(imm_sel),
         .rd(instruction[11:7]),

@@ -63,7 +63,7 @@ module IF_Stage(
             PC_IF <= mux_out;
     end
 
-    always_comb begin
+    always @(*) begin
         // Default to null
         rs1_x   = null_reg;
         rs2_x   = null_reg;
