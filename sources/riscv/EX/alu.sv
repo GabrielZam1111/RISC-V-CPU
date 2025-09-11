@@ -11,7 +11,7 @@ module ALU(
     logic signed [63:0] mul_signed;
     logic [63:0] mul_unsigned;
 
-    always_comb begin
+    always @(*) begin
             signed_data1 = data1;
             signed_data2 = data2;
             case(alu_op)

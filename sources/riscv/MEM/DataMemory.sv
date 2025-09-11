@@ -33,7 +33,7 @@ module DataMemory(
     end
     
     
-    always_comb begin
+    always @(*) begin
         if (read_en) begin
             case (read_write_en[2:0])
                 3'b000: begin

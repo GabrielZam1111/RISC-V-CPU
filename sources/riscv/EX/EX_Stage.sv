@@ -44,7 +44,7 @@ BranchLogic BRANCHL_LOGIC(
 
 mux4to1 mux1(
     .in0(data1),
-    .in1(PCin),
+    .in1(PC_in),
     .in2(write_data_WB),
     .in3(alu_result_MEM),
     .sel(data1_sel_ALU),

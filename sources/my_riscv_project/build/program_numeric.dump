@@ -1,0 +1,48 @@
+build/program.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00001117          	auipc	x2,0x1
+   4:	3fc10113          	addi	x2,x2,1020 # 13fc <__stack_top>
+   8:	07800293          	addi	x5,x0,120
+   c:	00001317          	auipc	x6,0x1
+  10:	ff430313          	addi	x6,x6,-12 # 1000 <__bss_end>
+  14:	00001397          	auipc	x7,0x1
+  18:	fec38393          	addi	x7,x7,-20 # 1000 <__bss_end>
+
+0000001c <copy_data>:
+  1c:	00730c63          	beq	x6,x7,34 <clear_bss>
+  20:	0002ae03          	lw	x28,0(x5)
+  24:	01c32023          	sw	x28,0(x6)
+  28:	00428293          	addi	x5,x5,4
+  2c:	00430313          	addi	x6,x6,4
+  30:	fedff06f          	jal	x0,1c <copy_data>
+
+00000034 <clear_bss>:
+  34:	00001297          	auipc	x5,0x1
+  38:	fcc28293          	addi	x5,x5,-52 # 1000 <__bss_end>
+  3c:	00001317          	auipc	x6,0x1
+  40:	fc430313          	addi	x6,x6,-60 # 1000 <__bss_end>
+
+00000044 <clear_bss_loop>:
+  44:	00628863          	beq	x5,x6,54 <call_main>
+  48:	0002a023          	sw	x0,0(x5)
+  4c:	00428293          	addi	x5,x5,4
+  50:	ff5ff06f          	jal	x0,44 <clear_bss_loop>
+
+00000054 <call_main>:
+  54:	008000ef          	jal	x1,5c <main>
+
+00000058 <loop>:
+  58:	0000006f          	jal	x0,58 <loop>
+
+0000005c <main>:
+  5c:	000017b7          	lui	x15,0x1
+  60:	23478793          	addi	x15,x15,564 # 1234 <__bss_end+0x234>
+  64:	00001737          	lui	x14,0x1
+  68:	00f72023          	sw	x15,0(x14) # 1000 <__bss_end>
+  6c:	00000013          	addi	x0,x0,0
+  70:	00000013          	addi	x0,x0,0
+  74:	ff9ff06f          	jal	x0,6c <main+0x10>

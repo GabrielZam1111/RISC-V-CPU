@@ -32,7 +32,7 @@ TARGET = $(BUILD_DIR)/program
 # Create build directory
 $(shell mkdir $(BUILD_DIR) 2>nul || echo off)
 
-all: $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dump
+all: $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).mem $(TARGET).dump $(TARGET).map $(TARGET)_numeric.dump
 
 # Link all object files
 $(TARGET).elf: $(ALL_OBJECTS) $(LINKER_DIR)/memory_layout.ld
@@ -54,21 +54,23 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.S
 $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
 
+# Generate .hex file with Verilog format
 $(TARGET).hex: $(TARGET).elf
-	$(OBJCOPY) -O verilog $< $@
+	$(OBJCOPY) -O verilog --verilog-data-width=4 $< $@
+
+# Generate .mem file (copy of hex with different extension)
+$(TARGET).mem: $(TARGET).hex
+	copy "$(subst /,\,$<)" "$(subst /,\,$@)"
 
 # Add memory map output
 $(TARGET).map: $(TARGET).elf
 	$(OBJDUMP) -h $< > $@
 
 $(TARGET).dump: $(TARGET).elf
-	$(OBJDUMP) -d $< > $@
-	
-$(TARGET).hex: $(TARGET).elf
-	$(OBJCOPY) -O verilog --verilog-data-width=4 $< $@
+	$(OBJDUMP) -d -M no-aliases $< > $@
 
-# Add map file to all target
-all: $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dump $(TARGET).map
+$(TARGET)_numeric.dump: $(TARGET).elf
+	$(OBJDUMP) -d -M no-aliases,numeric $< > $@
 
 clean:
 	del /Q $(BUILD_DIR)\* 2>nul || echo off
