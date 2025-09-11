@@ -1,5 +1,5 @@
 sources/new/
 *.vcd
-*.vpp
+*.vvp
 *.gtkw
 sources/riscv/IF/program.mem
