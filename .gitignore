@@ -2,3 +2,4 @@ sources/new/
 *.vcd
 *.vpp
 *.gtkw
+sources/riscv/IF/program.mem
