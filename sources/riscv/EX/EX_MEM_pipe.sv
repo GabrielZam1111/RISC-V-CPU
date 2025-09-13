@@ -64,7 +64,7 @@ module EX_MEM_pipe(
     end
 
     assign instruction_out = pipe_reg.instruction;
-    assign PCout = pipe_reg.PC;
+    assign PC_out = pipe_reg.PC;
     assign alu_result_out = pipe_reg.alu_result;
     assign immediate_out = pipe_reg.immediate;
     assign D_in_out = pipe_reg.D_in;

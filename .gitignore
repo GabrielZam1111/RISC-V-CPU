@@ -3,3 +3,4 @@ sources/new/
 *.vvp
 *.gtkw
 sources/riscv/IF/program.mem
+nul

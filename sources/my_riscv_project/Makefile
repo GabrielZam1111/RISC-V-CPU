@@ -29,7 +29,7 @@ ALL_OBJECTS = $(C_OBJECTS) $(CXX_OBJECTS) $(ASM_OBJECTS)
 
 TARGET = $(BUILD_DIR)/program
 
-# Create build directory
+# Create build director
 $(shell mkdir $(BUILD_DIR) 2>nul || echo off)
 
 all: $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).mem $(TARGET).dump $(TARGET).map $(TARGET)_numeric.dump
@@ -71,7 +71,6 @@ $(TARGET).dump: $(TARGET).elf
 
 $(TARGET)_numeric.dump: $(TARGET).elf
 	$(OBJDUMP) -d -M no-aliases,numeric $< > $@
-
 clean:
 	del /Q $(BUILD_DIR)\* 2>nul || echo off
 

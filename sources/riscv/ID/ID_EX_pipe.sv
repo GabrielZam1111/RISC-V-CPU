@@ -94,7 +94,7 @@ module ID_EX_pipe (
 
     // Output assignments
     assign instruction_out    = pipe_reg.instruction;
-    assign PCout              = pipe_reg.PC;
+    assign PC_out              = pipe_reg.PC;
     assign data1_out          = pipe_reg.data1;
     assign data2_out          = pipe_reg.data2;
     assign immediate_out      = pipe_reg.immediate;

@@ -41,7 +41,7 @@ module ControlUnit(
         assign rtype  = (opcode[6:2] == 5'b01100); // 0110011
 
         assign op1sel = auipc | jal | btype;
-        assign op2sel = auipc | jal | jalr | btype | load | store | itype;
+        assign op2sel = lui | auipc | jal | jalr | btype | load | store | itype;
         assign reg_write_en = lui | jal | jalr | load | store | itype | rtype;
         assign wb_sel = {jal | jalr | lui, jal | jalr | load};
         assign alu_op_type = itype | rtype;

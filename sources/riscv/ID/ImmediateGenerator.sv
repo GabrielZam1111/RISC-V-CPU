@@ -8,7 +8,7 @@ module ImmediateGenerator(
     always @(*) begin
         case (imm_sel)
             3'b000: immediate = {instruction[24:5],12'b0}; // U
-            3'b001: immediate = {{10{instruction[24]}},instruction[12:5],instruction[13],instruction[23:14], 2'b00}; //J
+            3'b001: immediate = {{12{instruction[24]}},instruction[12:5],instruction[13],instruction[23:14], 1'b0}; //J
             3'b010: immediate = {{20{instruction[24]}},instruction[23:18],instruction[4:0]};   //S
             3'b011: immediate = {{20{instruction[24]}},instruction[0],instruction[23:18],instruction[4:1], 1'b0}; //B
             3'b100: immediate = {{20{instruction[24]}},instruction[24:13]}; //I

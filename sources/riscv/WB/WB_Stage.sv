@@ -9,6 +9,8 @@ module WB_Stage(
         output logic [4:0] write_addr_WB,
         output logic [31:0] write_data_WB
 );
+    logic [31:0] PC_WB;
+    assign PC_WB = PCadd4 - 4;
     assign write_addr_WB = instruction[11:7];
 
     mux4to1 wb_mux (

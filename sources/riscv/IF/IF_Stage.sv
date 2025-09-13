@@ -14,19 +14,17 @@ package riscv_pkg;
 
 
     typedef enum logic [5:0] {
-        null_reg,
         x0,  x1,  x2,  x3,  x4,  x5,  x6,  x7,
         x8,  x9,  x10, x11, x12, x13, x14, x15,
         x16, x17, x18, x19, x20, x21, x22, x23,
-        x24, x25, x26, x27, x28, x29, x30, x31
+        x24, x25, x26, x27, x28, x29, x30, x31,null_reg
     } reg_x_e;
 
     typedef enum logic [5:0] {
-        null_abi,
         zero,  ra,   sp,   gp,   tp,   t0,   t1,   t2,
         s0,    s1,   a0,   a1,   a2,   a3,   a4,   a5,
         a6,    a7,   s2,   s3,   s4,   s5,   s6,   s7,
-        s8,    s9,   s10,  s11,  t3,   t4,   t5,   t6
+        s8,    s9,   s10,  s11,  t3,   t4,   t5,   t6,null_abi
     } reg_abi_e;
 
 endpackage
@@ -39,30 +37,32 @@ module IF_Stage(
     output logic [31:0]instruction_IF
 );
     import riscv_pkg::*;
-
     opcode_e   instr_opcode;
     reg_x_e    rs1_x, rs2_x, rd_x;
     reg_abi_e  rs1_abi, rs2_abi, rd_abi;
 
 
-    logic [31:0] PC_IFadd4;
-    logic [31:0] mux_out;
-    assign PC_IFadd4 = PC_IF + 4;
-    assign mux_out = pc_select ? alu_result_EX : PC_IFadd4;
+
+    logic [31:0] PC_next;
+
+    
+    assign PC_next = pc_select ? alu_result_EX : (PC_IF + 4);
+  
 
     InstructionMemory IMEM(
         .clk(clk),
-        .address(PC_IF),
+        .address(PC_next),
         .instruction(instruction_IF)
     );
 
     always_ff @(posedge clk or posedge reset) begin
-        if(reset)
+        if(reset) begin
             PC_IF <= 32'h0000_0000;
-        else
-            PC_IF <= mux_out;
+            end
+        else begin
+            PC_IF <= PC_next;
     end
-
+    end
     always @(*) begin
         // Default to null
         rs1_x   = null_reg;
