@@ -238,7 +238,7 @@ module cpu(
         .data1_sel_ALU(data1_sel_ALU_EX),
         .data2_sel_ALU(data2_sel_ALU_EX),
         .data1_sel_BJ(data1_sel_BJ_EX),
-        .data2_sel_BJ(data2_sel_BJ_EX),  // You have data2_sel_BJ(data1_sel_BJ_EX) - double check if typo
+        .data2_sel_BJ(data2_sel_BJ_EX), 
         
         .alu_result(alu_result_EX),
         .mux5_output(D_in_EX),
