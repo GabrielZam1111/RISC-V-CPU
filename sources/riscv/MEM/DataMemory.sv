@@ -6,15 +6,15 @@ module DataMemory(
     input logic [31:0] D_in,
     input logic [3:0] read_write_en,
     output logic [31:0] D_out,
-    output logic [15:0] led
+    output logic [14:0] led
 );
 
-    logic [31:0] memory [0:255];  
+    logic [31:0] memory [0:1023];  
     
 
     logic read_en, write_en;
     logic [1:0] byte_offset;
-    logic [7:0] word_addr;
+    logic [9:0] word_addr;
 
     assign word_addr = address[9:2];    
     assign byte_offset = address[1:0];  
@@ -27,7 +27,7 @@ module DataMemory(
     
     integer i;
     initial begin
-        for (i = 0; i < 256; i = i + 1) begin
+        for (i = 0; i < 1023; i = i + 1) begin
             memory[i] = 32'h00000000;
         end
     end
@@ -106,6 +106,6 @@ module DataMemory(
     end
     
 
-    assign led = memory[word_addr][15:0];
+    assign led = memory[64][14:0];
     
 endmodule

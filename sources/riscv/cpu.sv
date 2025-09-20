@@ -23,7 +23,6 @@
 module cpu(
         input logic clk,
         input logic reset,
-        input logic [3:0]btn,
         output logic [15:0]led 
     );
 
@@ -44,6 +43,7 @@ module cpu(
     // Signals for IF stage outputs (guessing 32-bit for PC and instruction)
     logic [31:0] PC_IF;
     logic [31:0] instruction_IF;
+    logic pc_enable;
 
     // Signals between IF_ID pipe
     logic [31:0] instruction_ID;
@@ -94,6 +94,7 @@ module cpu(
     logic [31:0] D_in_EX;
     logic pc_select;
 
+
     // Signals between EX_MEM pipe
     logic [31:0] PC_MEM;
     logic [31:0] alu_result_MEM;
@@ -120,12 +121,13 @@ module cpu(
     logic [1:0]wb_sel_WB;
 
     // WB Stage outputs
-    
-
+    assign stall = NOP_sel | pc_select;
+    assign led[15] = reset;
     IF_Stage IF(
         .clk(clk),
         .reset(reset),
         .pc_select(pc_select),
+        .pc_enable(pc_enable),
         .alu_result_EX(alu_result_EX),
         .PC_IF(PC_IF),
         .instruction_IF(instruction_IF)
@@ -134,6 +136,7 @@ module cpu(
     IF_ID_pipe IF_ID(
         .clk(clk),
         .reset(reset),
+        .NOP_sel(stall),
 
         .instruction_in(instruction_IF),
         .PC_in(PC_IF),
@@ -147,6 +150,9 @@ module cpu(
     ID_Stage ID(
         .clk(clk),
         .reset(reset),
+        .pc_enable(pc_enable),
+        .NOP_sel(NOP_sel),
+        .instruction_EX_opcode(instruction_EX[6:0]),
 
         .instruction(instruction_ID),
         .write_data_WB(write_data_WB),
@@ -167,6 +173,7 @@ module cpu(
         .read_write(read_write_ID),
         .wb_sel(wb_sel_ID),
         .reg_write_en(reg_write_en_ID),
+        .busywait_IF_ID(busywait_IF_ID),
 
         .data1_sel_ALU(data1_sel_ALU_ID),
         .data2_sel_ALU(data2_sel_ALU_ID),
@@ -177,7 +184,7 @@ module cpu(
     ID_EX_pipe ID_EX(
         .clk(clk),
         .reset(reset),
-
+        .NOP_sel(stall),
         .instruction_in(instruction_ID),
         .PC_in(PC_ID),
         .data1_in(data1_muxout_ID),
@@ -281,7 +288,7 @@ module cpu(
         .read_write(read_write_MEM),
         .D_out(D_out_MEM),
         .PCadd4(PCadd4_MEM),
-        .led(led)
+        .led(led[14:0])
     );
 
     MEM_WB_pipe MEM_WB(

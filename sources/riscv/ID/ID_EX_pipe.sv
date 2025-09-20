@@ -4,6 +4,7 @@ module ID_EX_pipe (
     input  logic                  clk,
     input  logic                  reset,
     input  logic                  busywait,
+    input  logic                  NOP_sel,
 
     input  logic [31:0]      instruction_in,
     input  logic [31:0]      PC_in,
@@ -67,21 +68,39 @@ module ID_EX_pipe (
         if (reset) begin
             pipe_reg_next = '0;
         end else if (!busywait) begin
-            pipe_reg_next.instruction    = instruction_in;
-            pipe_reg_next.PC             = PC_in;
-            pipe_reg_next.data1          = data1_in;
-            pipe_reg_next.data2          = data2_in;
-            pipe_reg_next.immediate      = immediate_in;
-            pipe_reg_next.data1_sel_ALU  = data1_sel_ALU_in;
-            pipe_reg_next.data2_sel_ALU  = data2_sel_ALU_in;
-            pipe_reg_next.data1_sel_BJ   = data1_sel_BJ_in;
-            pipe_reg_next.data2_sel_BJ   = data2_sel_BJ_in;
-            pipe_reg_next.data_sel_MEM   = data_sel_MEM_in;
-            pipe_reg_next.alu_op         = alu_op_in;
-            pipe_reg_next.branch_jump    = branch_jump_in;
-            pipe_reg_next.read_write     = read_write_in;
-            pipe_reg_next.wb_sel         = wb_sel_in;
-            pipe_reg_next.reg_write_en   = reg_write_en_in;
+                 if (NOP_sel) begin
+                pipe_reg_next.instruction    = 32'h00000013;
+                pipe_reg_next.PC             = PC_in;
+                pipe_reg_next.data1          = data1_in;
+                pipe_reg_next.data2          = data2_in;
+                pipe_reg_next.immediate      = immediate_in;
+                pipe_reg_next.data1_sel_ALU  = 2'b00;
+                pipe_reg_next.data2_sel_ALU  = 2'b00;
+                pipe_reg_next.data1_sel_BJ   = 2'b00;
+                pipe_reg_next.data2_sel_BJ   = 2'b00;
+                pipe_reg_next.data_sel_MEM   = 1'b0;
+                pipe_reg_next.alu_op         = 5'b00000;
+                pipe_reg_next.branch_jump    = 3'b010; 
+                pipe_reg_next.read_write     = 4'b0000;      
+                pipe_reg_next.wb_sel         = 2'b00;        
+                pipe_reg_next.reg_write_en   = 1'b0;         
+            end else begin
+                pipe_reg_next.instruction    = instruction_in;
+                pipe_reg_next.PC             = PC_in;
+                pipe_reg_next.data1          = data1_in;
+                pipe_reg_next.data2          = data2_in;
+                pipe_reg_next.immediate      = immediate_in;
+                pipe_reg_next.data1_sel_ALU  = data1_sel_ALU_in;
+                pipe_reg_next.data2_sel_ALU  = data2_sel_ALU_in;
+                pipe_reg_next.data1_sel_BJ   = data1_sel_BJ_in;
+                pipe_reg_next.data2_sel_BJ   = data2_sel_BJ_in;
+                pipe_reg_next.data_sel_MEM   = data_sel_MEM_in;
+                pipe_reg_next.alu_op         = alu_op_in;
+                pipe_reg_next.branch_jump    = branch_jump_in;
+                pipe_reg_next.read_write     = read_write_in;
+                pipe_reg_next.wb_sel         = wb_sel_in;
+                pipe_reg_next.reg_write_en   = reg_write_en_in;
+            end
         end
     end
 

@@ -5,6 +5,7 @@ module ForwardingUnit (
     input  logic [4:0] ex_addr,
     input  logic [4:0] mem_addr,
     input  logic [4:0] wb_addr,
+    input logic  [6:0] ex_opcode,
     input  logic       op1sel,
     input  logic       op2sel,
     output logic [1:0] data1_sel_ALU,
@@ -13,7 +14,10 @@ module ForwardingUnit (
     output logic [1:0] data2_sel_BJ,
     output logic       data1_sel_ID,
     output logic       data2_sel_ID,
-    output logic       data_sel_MEM
+    output logic       data_sel_MEM,
+    output logic pc_enable,
+    output logic busywait_IF_ID,
+    output logic NOP_sel
 );
 
    
@@ -62,5 +66,23 @@ module ForwardingUnit (
 
     
     assign data_sel_MEM = MEM_EXE_BJ_DATA2;
+    
+    
+    logic EX_LOAD;
+    assign EX_LOAD = (ex_opcode == 7'b0000011);
+    
+     logic current_uses_rs1, current_uses_rs2;
+    assign current_uses_rs1 = INST_MASK;  
+    assign current_uses_rs2 = R_TYPE | STORE | (opcode == 7'b1100011);
+    
+    logic load_use_hazard;
+    assign load_use_hazard = EX_LOAD && 
+                            (ex_addr != 5'b00000) &&  // Not x0 register
+                            ((current_uses_rs1 && (ex_addr == addr1)) ||
+                             (current_uses_rs2 && (ex_addr == addr2)));
+    
+    assign pc_enable = ~load_use_hazard;
+    assign busywait_IF_ID = load_use_hazard;
+    assign NOP_sel = load_use_hazard;
 
 endmodule

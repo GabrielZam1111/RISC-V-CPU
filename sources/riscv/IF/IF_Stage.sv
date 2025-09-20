@@ -32,6 +32,7 @@ endpackage
 module IF_Stage(
     input logic clk, reset,
     input logic pc_select,
+    input logic pc_enable,
     input logic [31:0] alu_result_EX,
     output logic [31:0]PC_IF,
     output logic [31:0]instruction_IF
@@ -58,11 +59,12 @@ module IF_Stage(
     always_ff @(posedge clk or posedge reset) begin
         if(reset) begin
             PC_IF <= 32'h0000_0000;
-            end
-        else begin
+            instruction_IF <= 32'h00000013;
+        end
+        else if (pc_enable)
             PC_IF <= PC_next;
     end
-    end
+
     always @(*) begin
         // Default to null
         rs1_x   = null_reg;

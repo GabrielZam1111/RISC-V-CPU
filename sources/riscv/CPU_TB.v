@@ -35,11 +35,11 @@ module CPU_TB(
         $dumpfile("cpu_tb.vcd");
         $dumpvars(0, uut); // Dumps all signals in the cpu instance
         clk = 0;
-        #10;
+        #100;
         reset = 1;
         #1;
         reset = 0;
-        #100
+        #500
         ;
         $finish;
     end 

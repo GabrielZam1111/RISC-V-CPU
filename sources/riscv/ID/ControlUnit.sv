@@ -42,8 +42,8 @@ module ControlUnit(
 
         assign op1sel = auipc | jal | btype;
         assign op2sel = lui | auipc | jal | jalr | btype | load | store | itype;
-        assign reg_write_en = lui | jal | jalr | load | itype | rtype;
-        assign wb_sel = {jal | jalr | lui, jal | jalr | load};
+        assign reg_write_en = lui| auipc | jal | jalr | load | itype | rtype;
+        assign wb_sel = {jal | lui, jal | load};
         assign alu_op_type = itype | rtype;
         assign bl = jal | jalr | btype;
         assign imm_type = {jalr | load | itype, btype | store, jal | btype};

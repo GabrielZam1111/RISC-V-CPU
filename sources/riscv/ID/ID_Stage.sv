@@ -28,16 +28,23 @@ module ID_Stage(
         output logic [1:0]data2_sel_ALU,
         output logic [1:0]data1_sel_BJ,
         output logic [1:0]data2_sel_BJ,
-        output logic data_sel_MEM
+        output logic data_sel_MEM,
+
+        output logic pc_enable,
+        output logic busywait_IF_ID,
+        output logic NOP_sel,
+        input logic [6:0] instruction_EX_opcode
 );
 
     logic [31:0] data1, data2;
     logic op1sel, op2sel;
     logic [2:0] imm_sel;
-
+    logic [6:0] ex_opcode;
 
     assign mux1_output = data1_sel_ID ? write_data_WB : data1;
     assign mux2_output = data2_sel_ID ? write_data_WB : data2;
+
+    assign ex_opcode = instruction_EX_opcode;
 
     RegisterFile REG_FILE(
         .clk(clk),
@@ -81,6 +88,7 @@ module ID_Stage(
         .op1sel(op1sel),
         .op2sel(op2sel),
         .wb_addr(wb_addr_WB),
+        .ex_opcode(ex_opcode),
         .mem_addr(mem_addr_MEM),
         .ex_addr(ex_addr_EX),
         .data1_sel_ID(data1_sel_ID),
@@ -89,7 +97,11 @@ module ID_Stage(
         .data2_sel_ALU(data2_sel_ALU),
         .data1_sel_BJ(data1_sel_BJ),
         .data2_sel_BJ(data2_sel_BJ),
-        .data_sel_MEM(data_sel_MEM)
+        .data_sel_MEM(data_sel_MEM),
+        .pc_enable(pc_enable),
+        .busywait_IF_ID(busywait_IF_ID),
+        .NOP_sel(NOP_sel)
+        
     );
 
 endmodule

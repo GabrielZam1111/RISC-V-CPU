@@ -3,6 +3,7 @@ module IF_ID_pipe(
     input logic [31:0] instruction_in,
     input logic [31:0] PC_in,
     input logic busywait,
+    input logic NOP_sel,
     output logic [31:0] instruction_out,
     output logic [31:0] PC_out
 );
@@ -20,9 +21,14 @@ module IF_ID_pipe(
         if (reset) begin
             pipe_reg_next = '0;
         end else if (!busywait) begin
+            if(NOP_sel) begin
+                pipe_reg_next.instruction = 32'h00000013; // NOP instruction
+                pipe_reg_next.PC = PC_in;
+            end else begin
             pipe_reg_next.instruction = instruction_in;
             pipe_reg_next.PC = PC_in;
         end
+    end
     end
 
     always_ff @(posedge clk or posedge reset)

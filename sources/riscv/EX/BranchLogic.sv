@@ -4,6 +4,7 @@ module BranchLogic(
         input logic [31:0] data1,
         input logic [31:0] data2,
         input logic [2:0] branch_jump,
+        output logic JUMP,
         output logic pc_select
 );
         logic equal;
@@ -28,4 +29,6 @@ module BranchLogic(
                 default: pc_select = 0;   
          endcase 
         end
+        
+
 endmodule

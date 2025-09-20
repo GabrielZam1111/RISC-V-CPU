@@ -9,7 +9,7 @@ module MEM_Stage(
     input logic [3:0] read_write,
     output logic [31:0] D_out,
     output logic [31:0] PCadd4,
-    output logic [15:0] led
+    output logic [14:0] led
 );
     logic [31:0] mux_out;
     assign PCadd4 = PC_in + 32'd4;
