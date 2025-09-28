@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module ALU(
+ module ALU(
     input logic [31:0] data1,
     input logic [31:0] data2,
     input logic [4:0] alu_op,

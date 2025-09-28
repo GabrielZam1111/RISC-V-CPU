@@ -30,10 +30,10 @@ module cpu(
      
     
     // Busywait signals (1 bit)
-    logic busywait_IF_ID = 0;
-    logic busywait_ID_EX = 0;
-    logic busywait_EX_MEM = 0;
-    logic busywait_MEM_WB = 0;
+    logic busywait_IF_ID;
+    logic busywait_ID_EX;
+    logic busywait_EX_MEM;
+    logic busywait_MEM_WB;
     
     // Addresses and instructions are 32-bit
     logic [31:0] write_addr_WB;
@@ -120,7 +120,15 @@ module cpu(
 
     logic [1:0]wb_sel_WB;
 
-    // WB Stage outputs
+    initial begin
+        busywait_IF_ID = 0; 
+        busywait_ID_EX = 0; 
+        busywait_EX_MEM = 0;
+        busywait_MEM_WB = 0;
+    end
+    
+
+    // WB Stage outputs;
     assign stall = NOP_sel | pc_select;
     assign led[15] = reset;
     IF_Stage IF(

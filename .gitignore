@@ -4,3 +4,4 @@ sources/new/
 *.gtkw
 sources/riscv/IF/program.mem
 nul
+sources/my_riscv_project/

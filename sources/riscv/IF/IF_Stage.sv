@@ -45,7 +45,7 @@ module IF_Stage(
 
 
     logic [31:0] PC_next;
-
+    logic [31:0] imem_instruction;
     
     assign PC_next = pc_select ? alu_result_EX : (PC_IF + 4);
   
@@ -53,16 +53,26 @@ module IF_Stage(
     InstructionMemory IMEM(
         .clk(clk),
         .address(PC_next),
-        .instruction(instruction_IF)
+        .instruction(imem_instruction)
     );
 
-    always_ff @(posedge clk or posedge reset) begin
+    always_ff @(posedge clk or posedge reset or posedge pc_enable) begin
         if(reset) begin
             PC_IF <= 32'h0000_0000;
-            instruction_IF <= 32'h00000013;
         end
         else if (pc_enable)
             PC_IF <= PC_next;
+            
+        
+    end
+    
+    always_ff @(posedge clk or posedge reset) begin
+        if(reset) begin
+            instruction_IF <= 32'h00000013;
+        end
+        else begin
+            instruction_IF <= imem_instruction;
+        end
     end
 
     always @(*) begin
